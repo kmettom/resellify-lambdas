@@ -21,7 +21,7 @@ phases:
     commands:
       - docker build
         --platform linux/amd64
-        --file Dockerfile.lambda
+        --file Dockerfile
         --tag $REPOSITORY_NAME:lambda 
         .
   post_build:
