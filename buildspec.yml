@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+    REPOSITORY_NAME: "lambdas"
+  parameter-store:
+    DOCKER_USERNAME: /codebuild/docker_username
+    DOCKER_PASSWORD: /codebuild/docker_password
+phases:
+  install:
+    on-failure: ABORT
+    commands:
+      - docker version
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  build:
+    on-failure: ABORT
+    commands:
+      - docker build
+        --platform linux/amd64
+        --file Dockerfile.lambda
+        --tag $REPOSITORY_NAME:lambda 
+        .
+  post_build:
+    on-failure: ABORT
+    commands:
+      - docker tag $REPOSITORY_NAME:lambda $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY_NAME:lambda
+      - docker push --all-tags $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY_NAME
