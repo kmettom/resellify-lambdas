@@ -1,0 +1,47 @@
+const AWS = require('aws-sdk');
+const cognito = new AWS.CognitoIdentityServiceProvider();
+
+const userPoolId = 'eu-west-1_gmEtYwMEW';
+
+exports.handler = async (event) => {
+    try {
+        const email = event.queryStringParameters?.email;
+
+        if (!email) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: 'Email query parameter is required' }),
+            };
+        }
+
+        const params = {
+            UserPoolId: userPoolId,
+            Filter: `email = "${email}"`,
+        };
+
+        const result = await cognito.listUsers(params).promise();
+
+        if (result.Users.length === 0) {
+            return {
+                statusCode: 404,
+                body: JSON.stringify({ message: 'User not found' }),
+            };
+        }
+
+        // const userId = result.Users[0].Username;
+        const user = result.Users[0];
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ user: user }),
+        };
+    } catch (error) {
+        console.error('Error retrieving user:', error);
+
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ message: 'Internal server error' }),
+        };
+    }
+};
+
