@@ -30,6 +30,7 @@ exports.handler = async (event) => {
             };
         }
 
+        
         // const userId = result.Users[0].Username;
         const user = result.Users[0];
 
