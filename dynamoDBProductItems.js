@@ -1,8 +1,9 @@
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-
 const tableName = 'Items-livrgwhq6bgn3hqrktnwm2hxzi-NONE';
+
+const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true,  "Content-Type": "application/json" };
 
 exports.handler = async (event) => {
     try {
@@ -12,12 +13,7 @@ exports.handler = async (event) => {
         if (!userId || !itemId) {
             return {
                 statusCode: 400,
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,access-control-allow-origin",
-                    "Access-Control-Allow-Methods": "OPTIONS,GET,POST",
-                    "Access-Control-Allow-Credentials": true
-                },
+                headers: headers,
                 body: JSON.stringify({ message: 'userId and itemId are required fields' }),
             };
         }
@@ -37,12 +33,7 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,access-control-allow-origin",
-                "Access-Control-Allow-Methods": "OPTIONS,GET,POST",
-                "Access-Control-Allow-Credentials": true
-            },
+            headers: headers,
             body: JSON.stringify({ message: 'Item successfully saved', item }),
 
         };
@@ -51,12 +42,7 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,access-control-allow-origin",
-                "Access-Control-Allow-Methods": "OPTIONS,GET,POST",
-                "Access-Control-Allow-Credentials": true
-            },
+            headers: headers,
             body: JSON.stringify({ message: 'Internal server error' }),
         };
     }
