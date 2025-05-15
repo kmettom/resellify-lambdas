@@ -1,12 +1,12 @@
 const AWS = require('aws-sdk');
 const cognito = new AWS.CognitoIdentityServiceProvider();
 
-const userPoolId = 'eu-west-1_gmEtYwMEW';
+const userPoolId = 'eu-west-1_24H3H8KXv';
 
 exports.handler = async (event) => {
     try {
         const email = event.queryStringParameters?.email;
-
+        console.log("email", email)
         if (!email) {
             return {
                 statusCode: 400,
@@ -20,6 +20,8 @@ exports.handler = async (event) => {
         };
 
         const result = await cognito.listUsers(params).promise();
+
+        console.log("result", result)
 
         if (result.Users.length === 0) {
             return {
