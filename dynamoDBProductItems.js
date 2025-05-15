@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+
 const tableName = 'Items-livrgwhq6bgn3hqrktnwm2hxzi-NONE';
 
 exports.handler = async (event) => {
