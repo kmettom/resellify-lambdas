@@ -12,6 +12,12 @@ exports.handler = async (event) => {
         if (!userId || !itemId) {
             return {
                 statusCode: 400,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,access-control-allow-origin",
+                    "Access-Control-Allow-Methods": "OPTIONS,GET,POST",
+                    "Access-Control-Allow-Credentials": true
+                },
                 body: JSON.stringify({ message: 'userId and itemId are required fields' }),
             };
         }
@@ -31,13 +37,26 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,access-control-allow-origin",
+                "Access-Control-Allow-Methods": "OPTIONS,GET,POST",
+                "Access-Control-Allow-Credentials": true
+            },
             body: JSON.stringify({ message: 'Item successfully saved', item }),
+
         };
     } catch (error) {
         console.error('Error saving item to DynamoDB:', error);
 
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,access-control-allow-origin",
+                "Access-Control-Allow-Methods": "OPTIONS,GET,POST",
+                "Access-Control-Allow-Credentials": true
+            },
             body: JSON.stringify({ message: 'Internal server error' }),
         };
     }
