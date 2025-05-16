@@ -13,8 +13,6 @@ exports.handler = async (event) => {
     try {
         const itemsArray = JSON.parse(event.body);
 
-        console.log("itemsArray", itemsArray);
-
         const promises = itemsArray.map(item => {
             const params = {
                 TableName: tableName,
@@ -23,18 +21,15 @@ exports.handler = async (event) => {
             return dynamodb.put(params).promise();
         });
 
-        const savedItems = await Promise.all(promises);
-
-        console.log("savedItems", savedItems)
+       await Promise.all(promises);
 
         return {
             statusCode: 200,
             headers: headers,
-            body: JSON.stringify({message: 'Item successfully saved', items: savedItems}),
+            body: JSON.stringify({message: 'Item successfully saved', items: itemsArray}),
         };
     } catch (error) {
         console.error('Error saving item to DynamoDB:', error);
-
         return {
             statusCode: 500,
             headers: headers,
