@@ -3,39 +3,34 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 const tableName = 'Items-livrgwhq6bgn3hqrktnwm2hxzi-NONE';
 
-const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true,  "Content-Type": "application/json" };
+const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true,
+    "Content-Type": "application/json"
+};
 
 exports.handler = async (event) => {
     try {
-        const body = JSON.parse(event.body);
+        const itemsArray = JSON.parse(event.body);
 
-        const { userId, itemId, ...additionalData } = body;
-        if (!userId || !itemId) {
-            return {
-                statusCode: 400,
-                headers: headers,
-                body: JSON.stringify({ message: 'userId and itemId are required fields' }),
+        console.log("itemsArray", itemsArray);
+
+        const promises = itemsArray.map(item => {
+            const params = {
+                TableName: tableName,
+                Item: item,
             };
-        }
+            return dynamodb.put(params).promise();
+        });
 
-        const item = {
-            userId,
-            itemId,
-            ...additionalData,
-        };
+        const savedItems = await Promise.all(promises);
 
-        const params = {
-            TableName: tableName,
-            Item: item,
-        };
-
-        await dynamodb.put(params).promise();
+        console.log("savedItems", savedItems)
 
         return {
             statusCode: 200,
             headers: headers,
-            body: JSON.stringify({ message: 'Item successfully saved', item }),
-
+            body: JSON.stringify({message: 'Item successfully saved', items: savedItems}),
         };
     } catch (error) {
         console.error('Error saving item to DynamoDB:', error);
@@ -43,7 +38,7 @@ exports.handler = async (event) => {
         return {
             statusCode: 500,
             headers: headers,
-            body: JSON.stringify({ message: 'Internal server error' }),
+            body: JSON.stringify({message: 'Internal server error'}),
         };
     }
 };
