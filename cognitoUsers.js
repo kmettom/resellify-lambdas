@@ -6,16 +6,16 @@ const userPoolId = 'eu-west-1_24H3H8KXv';
 const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true,  "Content-Type": "application/json" };
 
 exports.handler = async (event) => {
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 204,
+            headers: headers,
+        };
+    }
+
     try {
         const email = event.queryStringParameters?.email;
         console.log("email", email)
-
-        if (event.httpMethod === 'OPTIONS') {
-            return {
-                statusCode: 204,
-                headers: headers
-            };
-        }
 
         if (!email) {
             return {

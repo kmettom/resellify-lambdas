@@ -13,6 +13,13 @@ const headers = {
 };
 
 exports.handler = async (event) => {
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 204,
+            headers: headers,
+        };
+    }
+
     try {
         const itemsArray = JSON.parse(event.body);
 
