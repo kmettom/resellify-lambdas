@@ -3,7 +3,14 @@ const cognito = new AWS.CognitoIdentityServiceProvider();
 
 const userPoolId = 'eu-west-1_24H3H8KXv';
 
-const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true,  "Content-Type": "application/json" };
+const headers = {
+    'Access-Control-Allow-Origin': 'https://extensions.shopifycdn.com',
+    'Access-Control-Allow-Credentials': "true",
+    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+    'Access-Control-Allow-Headers': "Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token",
+    "Content-Type": "application/json",
+    Accept: "application/json",
+};
 
 exports.handler = async (event) => {
     if (event.httpMethod === "OPTIONS") {
