@@ -4,12 +4,10 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const tableName = 'Items-livrgwhq6bgn3hqrktnwm2hxzi-NONE';
 
 const headers = {
-    'Access-Control-Allow-Origin': 'https://extensions.shopifycdn.com',
-    'Access-Control-Allow-Credentials': "true",
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
     'Access-Control-Allow-Headers': "Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token",
     "Content-Type": "application/json",
-    Accept: "application/json",
 };
 
 exports.handler = async (event) => {
