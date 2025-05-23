@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const cognito = new AWS.CognitoIdentityServiceProvider();
 
 const userPoolId = 'eu-west-1_24H3H8KXv';
-const clientId = 'YOUR_USER_POOL_CLIENT_ID'; // Replace with your Cognito App Client ID
 
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -30,9 +29,9 @@ exports.handler = async (event) => {
     try {
         const body = JSON.parse(event.body);
 
-        const { username, password, email } = body;
+        const { email } = body;
 
-        if (!username || !password || !email) {
+        if (!email) {
             return {
                 statusCode: 400,
                 headers: headers,
@@ -41,9 +40,8 @@ exports.handler = async (event) => {
         }
 
         const params = {
-            ClientId: clientId,
-            Username: username,
-            Password: password,
+            ClientId: userPoolId,
+            Username: email,
             UserAttributes: [
                 {
                     Name: 'email',

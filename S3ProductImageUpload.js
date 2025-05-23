@@ -1,7 +1,13 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
-const bucketName = 'YOUR_BUCKET_NAME'; // Replace with your S3 bucket name
+export const S3BucketOptions = {
+    bucketName:
+        "amplify-expotestapp-lloyd-resellifyimagestoragebuc-hxtkoqw6hqft",
+    region: "eu-west-1",
+}
+
+export const S3BucketFolder = 'item-image/'
 
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -31,6 +37,8 @@ exports.handler = async (event) => {
 
         const { fileName, fileType } = body;
 
+        console.log("fileName, fileType", fileName, fileType)
+
         if (!fileName || !fileType) {
             return {
                 statusCode: 400,
@@ -40,7 +48,7 @@ exports.handler = async (event) => {
         }
 
         const params = {
-            Bucket: bucketName,
+            Bucket: S3BucketOptions.bucketName,
             Key: fileName, // Full key (e.g., "uploads/image.png")
             ContentType: fileType,
             Expires: 60, // Presigned URL expiration time in seconds
